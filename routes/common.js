@@ -46,7 +46,7 @@ async function getRedis(route) {
         return apiData;
       });
     }
-    return result;
+    return JSON.parse(result);
   });
 }
 
