@@ -8,3 +8,7 @@ or
 ```
 yarn start
 ```
+
+start in background and write to log:
+```
+yarn start > log&
