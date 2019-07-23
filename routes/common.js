@@ -54,7 +54,7 @@ async function getRedis(route) {
 router.get("*", function(req, res) {
   (async function() {
     const data = await getRedis(req.url);
-    res.send(data);
+    await res.json(data);
   })();
 });
 
