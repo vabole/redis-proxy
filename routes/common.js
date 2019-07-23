@@ -8,7 +8,7 @@ const client = redis.createClient();
 const getAsync = promisify(client.get).bind(client);
 const setAsync = promisify(client.set).bind(client);
 
-const API_ROUTE = "http://10.5.0.178:9999/api/v1";
+const API_ROUTE = process.env.API_ROUTE || "http://10.5.0.178:9999/";
 
 const ax = axios.create({
   baseURL: API_ROUTE
