@@ -41,12 +41,13 @@ async function getRedis(route) {
   return getAsync(route).then(async result => {
     if (!result) {
       return await fromApi(route).then(apiData => {
+          const responseString = JSON.stringify(apiData);
         console.log("api data");
-        setAsync(route, JSON.stringify(apiData));
-        return apiData;
+        setAsync(route, responseString);
+        return responseString;
       });
     }
-    return JSON.parse(result);
+    return result;
   });
 }
 
@@ -54,7 +55,7 @@ async function getRedis(route) {
 router.get("*", function(req, res) {
   (async function() {
     const data = await getRedis(req.url);
-    await res.json(data);
+      res.send(data);
   })();
 });
 
