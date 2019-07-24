@@ -14,7 +14,7 @@ const ax = axios.create({
   baseURL: API_ROUTE
 });
 
-async function fromApi(route) {
+async function fromApi(route, res) {
   return ax
     .get(route)
     .then(response => response.data)
@@ -27,20 +27,23 @@ async function fromApi(route) {
             error.response.data
           )}`
         );
+        res.error(error.response.data);
         return error.response.data;
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
       } else if (error.request) {
         console.log(error.request);
+        res.error(error.request);
       }
+      Promise.reject();
     });
 }
 
-async function getRedis(route) {
+async function getRedis(route, res) {
   return getAsync(route).then(async result => {
     if (!result) {
-      return await fromApi(route).then(apiData => {
+      return await fromApi(route, res).then(apiData => {
           const responseString = JSON.stringify(apiData);
         console.log("api data");
         setAsync(route, responseString);
@@ -54,7 +57,7 @@ async function getRedis(route) {
 /* GET home page. */
 router.get("*", function(req, res) {
   (async function() {
-    const data = await getRedis(req.url);
+    const data = await getRedis(req.url, res);
       res.send(data);
   })();
 });
